@@ -1,0 +1,35 @@
+﻿<!--
+  Vue “Health” :
+  - Bouton "Check API" pour déclencher l\'appel
+  - ProgressBar liée à IsBusy
+  - TextBox liée à StatusText
+  Le converter BoolToVisibilityConverter est déclaré dans Resources/Styles.xaml (global).
+-->
+<UserControl x:Class="Ecauspacine.Wpf.Views.Health.HealthView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignHeight="200" d:DesignWidth="600">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="8"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Ligne 1 : bouton + loader -->
+        <StackPanel Orientation="Horizontal">
+            <!-- Bouton nommé pour être accessible depuis MainWindow (code-behind) -->
+            <Button x:Name="CheckButton" Width="120" Height="32" Content="Check API" />
+            <!-- ProgressBar visible uniquement quand IsBusy = true -->
+            <ProgressBar Width="200" Height="8" Margin="12,0,0,0" IsIndeterminate="True"
+                         Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        </StackPanel>
+
+        <!-- Ligne 3 : affichage brut de la réponse JSON ou du message d\'erreur -->
+        <TextBox Grid.Row="2" IsReadOnly="True" TextWrapping="Wrap"
+                 VerticalScrollBarVisibility="Auto"
+                 Text="{Binding StatusText, UpdateSourceTrigger=PropertyChanged}"/>
+    </Grid>
+</UserControl>

@@ -1,0 +1,12 @@
+﻿<Project>
+  <PropertyGroup>
+    <!-- Ne force pas le TFM si déjà défini par le projet -->
+    <TargetFramework Condition="'$([System.String]::IsNullOrEmpty($(TargetFramework)))'">net8.0</TargetFramework>
+
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>5</WarningLevel>
+  </PropertyGroup>
+</Project>
