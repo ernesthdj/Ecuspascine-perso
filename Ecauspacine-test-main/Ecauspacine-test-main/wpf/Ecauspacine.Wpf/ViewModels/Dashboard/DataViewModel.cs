@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Ecauspacine.Contracts.Attributes;
 using Ecauspacine.Contracts.Entities;
 using Ecauspacine.Wpf.Helpers;
 using Ecauspacine.Wpf.Services.Interfaces;
@@ -17,14 +14,13 @@ public class DataViewModel : ViewModelBase, IInitializable
 {
     private readonly ISchemaService _schemaService;
     private readonly IDataService _dataService;
+    private readonly IRecordJsonConverter _jsonConverter;
 
-    private readonly Dictionary<long, AttributeDefDto> _definitions = new();
-    private readonly Dictionary<long, IReadOnlyList<AttributeRuleDto>> _rulesByEntity = new();
-
-    public DataViewModel(ISchemaService schemaService, IDataService dataService)
+    public DataViewModel(ISchemaService schemaService, IDataService dataService, IRecordJsonConverter jsonConverter)
     {
         _schemaService = schemaService;
         _dataService = dataService;
+        _jsonConverter = jsonConverter;
 
         EntityTypes = new ObservableCollection<EntityTypeDto>();
         Records = new ObservableCollection<RecordSummary>();
@@ -139,8 +135,6 @@ public class DataViewModel : ViewModelBase, IInitializable
         Records.Clear();
         SelectedEntityType = null;
         SelectedRecord = null;
-        _definitions.Clear();
-        _rulesByEntity.Clear();
         NewRecordJson = "{}";
         EditRecordJson = null;
         ErrorMessage = null;
@@ -165,28 +159,12 @@ public class DataViewModel : ViewModelBase, IInitializable
             IsBusy = true;
             ErrorMessage = null;
 
-            if (!_rulesByEntity.TryGetValue(SelectedEntityType.Id, out var rules))
-            {
-                rules = await _schemaService.GetAttributeRulesAsync(SelectedEntityType.Id);
-                _rulesByEntity[SelectedEntityType.Id] = rules;
-            }
-
-            foreach (var rule in rules)
-            {
-                if (!_definitions.ContainsKey(rule.AttributeDefId))
-                {
-                    var defs = await _schemaService.GetAttributeDefinitionsAsync();
-                    foreach (var def in defs)
-                        _definitions[def.Id] = def;
-                    break;
-                }
-            }
-
             var records = await _dataService.GetRecordsAsync(SelectedEntityType.Id, Search, SortAttribute, SortDescending);
             Records.Clear();
             foreach (var record in records)
             {
-                Records.Add(new RecordSummary(record, BuildRecordJson(record, rules)));
+                var json = await _jsonConverter.BuildRecordJsonAsync(record, SelectedEntityType.Id);
+                Records.Add(new RecordSummary(record, json));
             }
         }
         catch (Exception ex)
@@ -206,13 +184,11 @@ public class DataViewModel : ViewModelBase, IInitializable
         {
             IsBusy = true;
             ErrorMessage = null;
-            var payload = await BuildRecordPayloadAsync(SelectedEntityType.Id, NewRecordJson);
+            var payload = await _jsonConverter.BuildRecordPayloadAsync(SelectedEntityType.Id, NewRecordJson);
             var dto = new EntityRecordCreateDto(SelectedEntityType.Id, null, payload);
             var created = await _dataService.CreateRecordAsync(dto);
-            if (_rulesByEntity.TryGetValue(SelectedEntityType.Id, out var rules))
-            {
-                Records.Add(new RecordSummary(created, BuildRecordJson(created, rules)));
-            }
+            var json = await _jsonConverter.BuildRecordJsonAsync(created, SelectedEntityType.Id);
+            Records.Add(new RecordSummary(created, json));
             RequestEntityReload?.Invoke();
             NewRecordJson = "{}";
         }
@@ -235,12 +211,13 @@ public class DataViewModel : ViewModelBase, IInitializable
         {
             IsBusy = true;
             ErrorMessage = null;
-            var payload = await BuildRecordPayloadAsync(SelectedEntityType.Id, EditRecordJson);
+            var payload = await _jsonConverter.BuildRecordPayloadAsync(SelectedEntityType.Id, EditRecordJson);
             var dto = new EntityRecordUpdateDto(null, payload);
             var updated = await _dataService.UpdateRecordAsync(SelectedEntityType.Id, SelectedRecord.Dto.Id, dto);
-            if (updated is not null && _rulesByEntity.TryGetValue(SelectedEntityType.Id, out var rules))
+            if (updated is not null)
             {
-                var summary = new RecordSummary(updated, BuildRecordJson(updated, rules));
+                var json = await _jsonConverter.BuildRecordJsonAsync(updated, SelectedEntityType.Id);
+                var summary = new RecordSummary(updated, json);
                 var index = Records.IndexOf(SelectedRecord);
                 Records[index] = summary;
                 SelectedRecord = summary;
@@ -277,78 +254,5 @@ public class DataViewModel : ViewModelBase, IInitializable
         {
             IsBusy = false;
         }
-    }
-
-    private async Task<IReadOnlyList<AttributeValueUpsertDto>> BuildRecordPayloadAsync(long entityTypeId, string? json)
-    {
-        if (string.IsNullOrWhiteSpace(json))
-            throw new InvalidOperationException("Fournissez un JSON valide.");
-
-        var doc = JsonDocument.Parse(json);
-        if (doc.RootElement.ValueKind != JsonValueKind.Object)
-            throw new InvalidOperationException("Le JSON doit représenter un objet.");
-
-        if (!_rulesByEntity.TryGetValue(entityTypeId, out var rules))
-        {
-            rules = await _schemaService.GetAttributeRulesAsync(entityTypeId);
-            _rulesByEntity[entityTypeId] = rules;
-        }
-
-        var list = new List<AttributeValueUpsertDto>();
-        foreach (var rule in rules)
-        {
-            if (!_definitions.TryGetValue(rule.AttributeDefId, out var def))
-                continue;
-
-            if (!doc.RootElement.TryGetProperty(def.Code, out var valueElement))
-                continue;
-
-            var upsert = rule.AttributeCode switch
-            {
-                _ when def.DataKind == Ecauspacine.Contracts.Common.DataKindCodes.Enum => new AttributeValueUpsertDto(0, def.Id, def.DataKind, null, valueElement.GetInt64(), null),
-                _ when def.DataKind == Ecauspacine.Contracts.Common.DataKindCodes.EntityReference => new AttributeValueUpsertDto(0, def.Id, def.DataKind, null, null, valueElement.GetInt64()),
-                _ => new AttributeValueUpsertDto(0, def.Id, def.DataKind, valueElement, null, null)
-            };
-
-            list.Add(upsert);
-        }
-
-        return list;
-    }
-
-    private string BuildRecordJson(EntityRecordDto record, IReadOnlyList<AttributeRuleDto> rules)
-    {
-        var dict = new Dictionary<string, object?>();
-        foreach (var rule in rules)
-        {
-            if (!_definitions.TryGetValue(rule.AttributeDefId, out var def))
-                continue;
-            var val = record.Values.FirstOrDefault(v => v.AttributeDefId == rule.AttributeDefId);
-            if (val is null)
-                continue;
-
-            object? value = val.DataKind switch
-            {
-                Ecauspacine.Contracts.Common.DataKindCodes.Enum => val.LookupItemId,
-                Ecauspacine.Contracts.Common.DataKindCodes.EntityReference => val.RefEntityId,
-                _ => val.JsonValue?.ToString()
-            };
-            dict[def.Code] = value;
-        }
-
-        return JsonSerializer.Serialize(dict, new JsonSerializerOptions { WriteIndented = true });
-    }
-
-    public class RecordSummary
-    {
-        public RecordSummary(EntityRecordDto dto, string json)
-        {
-            Dto = dto;
-            Json = json;
-        }
-
-        public EntityRecordDto Dto { get; }
-        public string Json { get; }
-        public override string ToString() => Json;
     }
 }
