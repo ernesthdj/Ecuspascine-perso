@@ -8,6 +8,7 @@ using Ecauspacine.Wpf.Services.Http;
 using Ecauspacine.Wpf.Services.Implementations;
 using Ecauspacine.Wpf.ViewModels;
 using Ecauspacine.Wpf.ViewModels.Dashboard;
+using Ecauspacine.Wpf.ViewModels.Dashboard.Schema;
 
 namespace Ecauspacine.Wpf;
 
@@ -40,10 +41,15 @@ public partial class App : Application
                 services.AddSingleton<IDataService, DataService>();
                 services.AddSingleton<ILookupClient, LookupClient>();
                 services.AddSingleton<IExportClient, ExportClient>();
+                services.AddSingleton<IRecordJsonConverter, RecordJsonConverter>();
 
-                // ViewModels
-                services.AddSingleton<LoginViewModel>();
+                // ViewModels - Schema Management (refactored)
+                services.AddSingleton<EntityTypeManagementViewModel>();
+                services.AddSingleton<AttributeManagementViewModel>();
                 services.AddSingleton<SchemaViewModel>();
+
+                // ViewModels - Dashboard
+                services.AddSingleton<LoginViewModel>();
                 services.AddSingleton<DataViewModel>();
                 services.AddSingleton<ExportViewModel>();
                 services.AddSingleton<DashboardViewModel>();

@@ -24,16 +24,16 @@
                 <StackPanel>
                     <TextBlock Text="Nouvelle entité" FontWeight="SemiBold" Margin="0,0,0,8" />
                     <TextBlock Text="Code" />
-                    <TextBox Text="{Binding NewEntityCode, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8" />
+                    <TextBox Text="{Binding EntityTypeManagement.NewEntityCode, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8" />
                     <TextBlock Text="Label" />
-                    <TextBox Text="{Binding NewEntityLabel, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8" />
+                    <TextBox Text="{Binding EntityTypeManagement.NewEntityLabel, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8" />
                     <TextBlock Text="Description" />
-                    <TextBox Text="{Binding NewEntityDescription, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding EntityTypeManagement.NewEntityDescription, UpdateSourceTrigger=PropertyChanged}"
                              AcceptsReturn="True"
                              Height="60"
                              Margin="0,0,0,12" />
                     <Button Content="Créer"
-                            Command="{Binding CreateEntityCommand}"
+                            Command="{Binding EntityTypeManagement.CreateEntityCommand}"
                             Background="{StaticResource AccentBrush}"
                             Foreground="White"
                             FontWeight="SemiBold" />
@@ -42,13 +42,13 @@
 
             <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                 <Button Content="Actualiser"
-                        Command="{Binding RefreshEntitiesCommand}"
+                        Command="{Binding EntityTypeManagement.RefreshEntitiesCommand}"
                         Margin="0,0,8,0" />
-                <Button Content="Supprimer" Command="{Binding DeleteEntityCommand}" />
+                <Button Content="Supprimer" Command="{Binding EntityTypeManagement.DeleteEntityCommand}" />
             </StackPanel>
 
-            <ListBox ItemsSource="{Binding EntityTypes}"
-                     SelectedItem="{Binding SelectedEntityType}"
+            <ListBox ItemsSource="{Binding EntityTypeManagement.EntityTypes}"
+                     SelectedItem="{Binding EntityTypeManagement.SelectedEntityType}"
                      Height="260"
                      Margin="0,0,0,12">
                 <ListBox.ItemTemplate>
@@ -61,15 +61,15 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <TextBlock Text="{Binding ErrorMessage}"
+            <TextBlock Text="{Binding EntityTypeManagement.ErrorMessage}"
                        Foreground="#F87171"
                        TextWrapping="Wrap"
                        Margin="0,0,0,12"
-                       Visibility="{Binding ErrorMessage, Converter={StaticResource StringNullOrEmptyToVisibilityConverter}}" />
+                       Visibility="{Binding EntityTypeManagement.ErrorMessage, Converter={StaticResource StringNullOrEmptyToVisibilityConverter}}" />
 
             <ProgressBar IsIndeterminate="True"
                          Height="6"
-                         Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+                         Visibility="{Binding EntityTypeManagement.IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
         </StackPanel>
 
         <!-- Colonne détails -->
@@ -81,7 +81,7 @@
             </Grid.RowDefinitions>
 
             <Border Background="#1F2937" CornerRadius="8" Padding="16">
-                <StackPanel IsEnabled="{Binding SelectedEntityType, Converter={StaticResource NullToBoolConverter}}">
+                <StackPanel IsEnabled="{Binding EntityTypeManagement.SelectedEntityType, Converter={StaticResource NullToBoolConverter}}">
                     <TextBlock Text="Informations entité" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,12" />
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -95,17 +95,17 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Code" Margin="0,0,12,8" />
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding EditEntityCode, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding EntityTypeManagement.EditEntityCode, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8" />
                         <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Label" Margin="0,0,12,8" />
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding EditEntityLabel, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8" />
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding EntityTypeManagement.EditEntityLabel, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8" />
                         <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Text="Description" Margin="0,0,12,0" />
                         <TextBox Grid.Row="2" Grid.Column="1"
-                                 Text="{Binding EditEntityDescription, UpdateSourceTrigger=PropertyChanged}"
+                                 Text="{Binding EntityTypeManagement.EditEntityDescription, UpdateSourceTrigger=PropertyChanged}"
                                  AcceptsReturn="True"
                                  Height="60" />
                     </Grid>
                     <Button Content="Sauvegarder l'entité"
-                            Command="{Binding SaveEntityCommand}"
+                            Command="{Binding EntityTypeManagement.SaveEntityCommand}"
                             Margin="0,16,0,0" />
                 </StackPanel>
             </Border>
@@ -117,8 +117,8 @@
                         <ColumnDefinition Width="3*" />
                     </Grid.ColumnDefinitions>
 
-                    <ListBox ItemsSource="{Binding Attributes}"
-                             SelectedItem="{Binding SelectedAttribute}"
+                    <ListBox ItemsSource="{Binding AttributeManagement.Attributes}"
+                             SelectedItem="{Binding AttributeManagement.SelectedAttribute}"
                              Margin="0,0,12,0">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
@@ -133,45 +133,45 @@
                     <StackPanel Grid.Column="1">
                         <GroupBox Header="Ajouter un attribut"
                                   Margin="0,0,0,16"
-                                  IsEnabled="{Binding SelectedEntityType, Converter={StaticResource NullToBoolConverter}}">
+                                  IsEnabled="{Binding EntityTypeManagement.SelectedEntityType, Converter={StaticResource NullToBoolConverter}}">
                             <StackPanel>
                                 <TextBlock Text="Code" />
-                                <TextBox Text="{Binding NewAttributeCode, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8" />
+                                <TextBox Text="{Binding AttributeManagement.NewAttributeCode, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8" />
                                 <TextBlock Text="Label" />
-                                <TextBox Text="{Binding NewAttributeLabel, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8" />
+                                <TextBox Text="{Binding AttributeManagement.NewAttributeLabel, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8" />
                                 <TextBlock Text="Description" />
-                                <TextBox Text="{Binding NewAttributeDescription, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8" />
+                                <TextBox Text="{Binding AttributeManagement.NewAttributeDescription, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8" />
                                 <TextBlock Text="Type" />
-                                <ComboBox ItemsSource="{Binding DataKinds}"
-                                          SelectedItem="{Binding SelectedDataKind}"
+                                <ComboBox ItemsSource="{Binding AttributeManagement.DataKinds}"
+                                          SelectedItem="{Binding AttributeManagement.SelectedDataKind}"
                                           DisplayMemberPath="DisplayName"
                                           Margin="0,0,0,8" />
                                 <TextBlock Text="Accès" />
-                                <ComboBox ItemsSource="{Binding AccessModes}"
-                                          SelectedItem="{Binding SelectedAccessMode}"
+                                <ComboBox ItemsSource="{Binding AttributeManagement.AccessModes}"
+                                          SelectedItem="{Binding AttributeManagement.SelectedAccessMode}"
                                           DisplayMemberPath="DisplayName"
                                           Margin="0,0,0,8" />
-                                <CheckBox Content="Obligatoire" IsChecked="{Binding NewAttributeIsRequired}" Margin="0,0,0,8" />
+                                <CheckBox Content="Obligatoire" IsChecked="{Binding AttributeManagement.NewAttributeIsRequired}" Margin="0,0,0,8" />
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                                     <TextBlock Text="Ordre" VerticalAlignment="Center" Margin="0,0,8,0" />
-                                    <TextBox Width="60" Text="{Binding NewAttributeOrder}" />
+                                    <TextBox Width="60" Text="{Binding AttributeManagement.NewAttributeOrder}" />
                                 </StackPanel>
                                 <TextBlock Text="Valeur par défaut (JSON)" />
-                                <TextBox Text="{Binding NewAttributeDefault, UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Text="{Binding AttributeManagement.NewAttributeDefault, UpdateSourceTrigger=PropertyChanged}"
                                          AcceptsReturn="True"
                                          Height="60"
                                          Margin="0,0,0,8" />
 
                                 <StackPanel Margin="0,0,0,8">
                                     <TextBlock Text="Groupe d'options" />
-                                    <ComboBox ItemsSource="{Binding LookupGroups}"
-                                              SelectedItem="{Binding SelectedLookupGroup}"
+                                    <ComboBox ItemsSource="{Binding AttributeManagement.LookupGroups}"
+                                              SelectedItem="{Binding AttributeManagement.SelectedLookupGroup}"
                                               DisplayMemberPath="Name">
                                         <ComboBox.Style>
                                             <Style TargetType="ComboBox">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding SelectedDataKind.Code}" Value="{x:Static contracts:DataKindCodes.Enum}">
+                                                    <DataTrigger Binding="{Binding AttributeManagement.SelectedDataKind.Code}" Value="{x:Static contracts:DataKindCodes.Enum}">
                                                         <Setter Property="Visibility" Value="Visible" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -182,14 +182,14 @@
 
                                 <StackPanel Margin="0,0,0,8">
                                     <TextBlock Text="Valeur par défaut (enum)" />
-                                    <ComboBox ItemsSource="{Binding AvailableLookupItems}"
-                                              SelectedItem="{Binding SelectedLookupItem}"
+                                    <ComboBox ItemsSource="{Binding AttributeManagement.AvailableLookupItems}"
+                                              SelectedItem="{Binding AttributeManagement.SelectedLookupItem}"
                                               DisplayMemberPath="Label">
                                         <ComboBox.Style>
                                             <Style TargetType="ComboBox">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding SelectedDataKind.Code}" Value="{x:Static contracts:DataKindCodes.Enum}">
+                                                    <DataTrigger Binding="{Binding AttributeManagement.SelectedDataKind.Code}" Value="{x:Static contracts:DataKindCodes.Enum}">
                                                         <Setter Property="Visibility" Value="Visible" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -200,14 +200,14 @@
 
                                 <StackPanel Margin="0,0,0,8">
                                     <TextBlock Text="Référence d'entité" />
-                                    <ComboBox ItemsSource="{Binding EntityTypes}"
-                                              SelectedItem="{Binding SelectedReferenceType}"
+                                    <ComboBox ItemsSource="{Binding AttributeManagement.EntityTypes}"
+                                              SelectedItem="{Binding AttributeManagement.SelectedReferenceType}"
                                               DisplayMemberPath="Label">
                                         <ComboBox.Style>
                                             <Style TargetType="ComboBox">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding SelectedDataKind.Code}" Value="{x:Static contracts:DataKindCodes.EntityReference}">
+                                                    <DataTrigger Binding="{Binding AttributeManagement.SelectedDataKind.Code}" Value="{x:Static contracts:DataKindCodes.EntityReference}">
                                                         <Setter Property="Visibility" Value="Visible" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -217,32 +217,32 @@
                                 </StackPanel>
 
                                 <Button Content="Créer l'attribut"
-                                        Command="{Binding AddAttributeCommand}" />
+                                        Command="{Binding AttributeManagement.AddAttributeCommand}" />
                             </StackPanel>
                         </GroupBox>
 
                         <GroupBox Header="Attribut sélectionné"
-                                  IsEnabled="{Binding SelectedAttribute, Converter={StaticResource NullToBoolConverter}}">
+                                  IsEnabled="{Binding AttributeManagement.SelectedAttribute, Converter={StaticResource NullToBoolConverter}}">
                             <StackPanel>
                                 <TextBlock Text="Valeur par défaut" />
-                                <TextBox Text="{Binding SelectedAttribute.DefaultValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Text="{Binding AttributeManagement.SelectedAttribute.DefaultValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          Margin="0,0,0,8" />
                                 <TextBlock Text="Accès" />
-                                <ComboBox ItemsSource="{Binding AccessModes}"
+                                <ComboBox ItemsSource="{Binding AttributeManagement.AccessModes}"
                                           SelectedValuePath="Code"
                                           DisplayMemberPath="DisplayName"
-                                          SelectedValue="{Binding SelectedAttribute.AccessMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          SelectedValue="{Binding AttributeManagement.SelectedAttribute.AccessMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                           Margin="0,0,0,8" />
                                 <CheckBox Content="Obligatoire"
-                                          IsChecked="{Binding SelectedAttribute.IsRequired, Mode=TwoWay}"
+                                          IsChecked="{Binding AttributeManagement.SelectedAttribute.IsRequired, Mode=TwoWay}"
                                           Margin="0,0,0,8" />
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                                     <TextBlock Text="Ordre" Margin="0,0,8,0" />
-                                    <TextBox Width="60" Text="{Binding SelectedAttribute.OrderIndex, Mode=TwoWay}" />
+                                    <TextBox Width="60" Text="{Binding AttributeManagement.SelectedAttribute.OrderIndex, Mode=TwoWay}" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Content="Enregistrer" Command="{Binding SaveAttributeCommand}" Margin="0,0,8,0" />
-                                    <Button Content="Supprimer" Command="{Binding DeleteAttributeCommand}" />
+                                    <Button Content="Enregistrer" Command="{Binding AttributeManagement.SaveAttributeCommand}" Margin="0,0,8,0" />
+                                    <Button Content="Supprimer" Command="{Binding AttributeManagement.DeleteAttributeCommand}" />
                                 </StackPanel>
                             </StackPanel>
                         </GroupBox>

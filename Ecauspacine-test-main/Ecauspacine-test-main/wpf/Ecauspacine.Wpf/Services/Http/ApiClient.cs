@@ -119,13 +119,13 @@ public class ApiClient : IApiClient
         return await JsonSerializer.DeserializeAsync<T>(stream, JsonOptions, ct);
     }
 
-    private async Task ApplyAuthAsync(HttpRequestMessage request)
+    private Task ApplyAuthAsync(HttpRequestMessage request)
     {
         if (!string.IsNullOrEmpty(_session.AccessToken))
         {
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _session.AccessToken);
         }
-        await Task.CompletedTask;
+        return Task.CompletedTask;
     }
 
     private static async Task EnsureSuccess(HttpResponseMessage response)
