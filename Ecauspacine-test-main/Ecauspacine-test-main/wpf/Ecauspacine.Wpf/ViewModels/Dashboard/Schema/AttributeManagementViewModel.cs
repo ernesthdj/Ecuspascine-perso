@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Ecauspacine.Contracts.Attributes;
+using Ecauspacine.Contracts.EntityTypes;
 using Ecauspacine.Contracts.Lookups;
 using Ecauspacine.Wpf.Helpers;
 using Ecauspacine.Wpf.Services.Interfaces;
