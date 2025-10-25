@@ -7,6 +7,8 @@
                     xmlns:conv="clr-namespace:Ecauspacine.Wpf.Converters">
     <!-- Converter disponible globalement -->
     <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <conv:StringNullOrEmptyToVisibilityConverter x:Key="StringNullOrEmptyToVisibilityConverter"/>
+    <conv:NullToBoolConverter x:Key="NullToBoolConverter"/>
 
     <!-- Styles basiques -->
     <Style TargetType="Window">

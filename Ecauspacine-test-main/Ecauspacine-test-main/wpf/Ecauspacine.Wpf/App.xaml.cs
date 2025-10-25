@@ -7,6 +7,7 @@ using Ecauspacine.Wpf.Services.Interfaces;
 using Ecauspacine.Wpf.Services.Http;
 using Ecauspacine.Wpf.Services.Implementations;
 using Ecauspacine.Wpf.ViewModels;
+using Ecauspacine.Wpf.ViewModels.Dashboard;
 
 namespace Ecauspacine.Wpf;
 
@@ -28,15 +29,28 @@ public partial class App : Application
                 // HttpClient configuré avec la base address de l'API (tunnel DEV).
                 services.AddSingleton(new HttpClient { BaseAddress = new Uri("http://localhost:5001") });
 
-                // Services applicatifs
+                // Sessions & clients API
+                services.AddSingleton<IApiSession, ApiSession>();
                 services.AddSingleton<IApiClient, ApiClient>();
+
+                // Services applicatifs
+                services.AddSingleton<IAuthenticationService, AuthenticationService>();
                 services.AddSingleton<IHealthService, HealthService>();
+                services.AddSingleton<ISchemaService, SchemaService>();
+                services.AddSingleton<IDataService, DataService>();
+                services.AddSingleton<ILookupClient, LookupClient>();
+                services.AddSingleton<IExportClient, ExportClient>();
 
-                // ViewModels : Transient = une instance par utilisation
-                services.AddTransient<HealthViewModel>();
+                // ViewModels
+                services.AddSingleton<LoginViewModel>();
+                services.AddSingleton<SchemaViewModel>();
+                services.AddSingleton<DataViewModel>();
+                services.AddSingleton<ExportViewModel>();
+                services.AddSingleton<DashboardViewModel>();
+                services.AddSingleton<ShellViewModel>();
 
-                // Windows
-                services.AddTransient<MainWindow>();
+                // Fenêtre principale
+                services.AddSingleton<MainWindow>();
             })
             .Build();
     }
