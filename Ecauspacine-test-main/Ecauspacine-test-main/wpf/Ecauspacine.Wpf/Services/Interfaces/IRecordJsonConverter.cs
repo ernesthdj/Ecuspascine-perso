@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Ecauspacine.Contracts.Attributes;
 using Ecauspacine.Contracts.Entities;
+using Ecauspacine.Contracts.Values;
 
 namespace Ecauspacine.Wpf.Services.Interfaces;
 

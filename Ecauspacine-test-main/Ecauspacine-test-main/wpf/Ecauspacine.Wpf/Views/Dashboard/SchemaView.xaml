@@ -171,7 +171,7 @@
                                             <Style TargetType="ComboBox">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding AttributeManagement.SelectedDataKind.Code}" Value="{x:Static contracts:DataKindCodes.Enum}">
+                                                    <DataTrigger Binding="{Binding DataContext.AttributeManagement.SelectedDataKind.Code, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="{x:Static contracts:DataKindCodes.Enum}">
                                                         <Setter Property="Visibility" Value="Visible" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -189,7 +189,7 @@
                                             <Style TargetType="ComboBox">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding AttributeManagement.SelectedDataKind.Code}" Value="{x:Static contracts:DataKindCodes.Enum}">
+                                                    <DataTrigger Binding="{Binding DataContext.AttributeManagement.SelectedDataKind.Code, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="{x:Static contracts:DataKindCodes.Enum}">
                                                         <Setter Property="Visibility" Value="Visible" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -207,7 +207,7 @@
                                             <Style TargetType="ComboBox">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding AttributeManagement.SelectedDataKind.Code}" Value="{x:Static contracts:DataKindCodes.EntityReference}">
+                                                    <DataTrigger Binding="{Binding DataContext.AttributeManagement.SelectedDataKind.Code, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="{x:Static contracts:DataKindCodes.EntityReference}">
                                                         <Setter Property="Visibility" Value="Visible" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
