@@ -12,6 +12,8 @@
                 <ResourceDictionary Source="/Resources/Themes/Colors.xaml"/>
                 <!-- Styles + convertisseurs (exposés en StaticResource) -->
                 <ResourceDictionary Source="/Resources/Styles.xaml"/>
+                <!-- Gabarits ViewModel -> View -->
+                <ResourceDictionary Source="/Resources/Templates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
