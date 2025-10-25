@@ -1,0 +1,30 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:Ecauspacine.Wpf.ViewModels"
+                    xmlns:dash="clr-namespace:Ecauspacine.Wpf.ViewModels.Dashboard"
+                    xmlns:viewsAuth="clr-namespace:Ecauspacine.Wpf.Views.Auth"
+                    xmlns:viewsDash="clr-namespace:Ecauspacine.Wpf.Views.Dashboard">
+    <DataTemplate DataType="{x:Type vm:LoginViewModel}">
+        <viewsAuth:LoginView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ShellViewModel}">
+        <ContentControl Content="{Binding CurrentView}" />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type dash:DashboardViewModel}">
+        <viewsDash:DashboardView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type dash:SchemaViewModel}">
+        <viewsDash:SchemaView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type dash:DataViewModel}">
+        <viewsDash:DataView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type dash:ExportViewModel}">
+        <viewsDash:ExportView />
+    </DataTemplate>
+</ResourceDictionary>
