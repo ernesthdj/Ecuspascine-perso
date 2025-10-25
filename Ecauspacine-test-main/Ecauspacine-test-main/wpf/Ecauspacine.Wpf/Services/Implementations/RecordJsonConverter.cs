@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Ecauspacine.Contracts.Attributes;
 using Ecauspacine.Contracts.Entities;
+using Ecauspacine.Contracts.Values;
 using Ecauspacine.Wpf.Services.Interfaces;
 
 namespace Ecauspacine.Wpf.Services.Implementations;

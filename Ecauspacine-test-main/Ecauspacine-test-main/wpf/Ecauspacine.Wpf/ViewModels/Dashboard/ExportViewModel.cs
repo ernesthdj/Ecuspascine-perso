@@ -3,13 +3,13 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 using Ecauspacine.Contracts.EntityTypes;
 using Ecauspacine.Contracts.Exports;
 using Ecauspacine.Wpf.Helpers;
 using Ecauspacine.Wpf.Services.Interfaces;
 using Ecauspacine.Wpf.ViewModels.Base;
+using WinForms = System.Windows.Forms;
 
 namespace Ecauspacine.Wpf.ViewModels.Dashboard;
 
@@ -139,13 +139,13 @@ public class ExportViewModel : ViewModelBase, IInitializable
 
     private void BrowseForDirectory()
     {
-        using var dialog = new FolderBrowserDialog
+        using var dialog = new WinForms.FolderBrowserDialog
         {
             Description = "Sélectionnez le dossier d'export",
             SelectedPath = Directory.Exists(TargetDirectory) ? TargetDirectory : Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
         };
 
-        if (dialog.ShowDialog() == DialogResult.OK)
+        if (dialog.ShowDialog() == WinForms.DialogResult.OK)
         {
             TargetDirectory = dialog.SelectedPath;
         }
